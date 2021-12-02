@@ -17,7 +17,14 @@ func GetInput(name string) string {
 
 func GetInputLines(name string) []string {
 	content := GetInput(name)
-	return strings.Split(strings.ReplaceAll(content, "\r\n", "\n"), "\n")
+	lines := strings.Split(strings.ReplaceAll(content, "\r\n", "\n"), "\n")
+	output := []string{}
+	for _, line := range lines {
+		if strings.TrimSpace(line) != "" {
+			output = append(output, line)
+		}
+	}
+	return output
 }
 
 func GetInputIntList(name string) []int {

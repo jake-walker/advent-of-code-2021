@@ -27,6 +27,14 @@ func GetInputLines(name string) []string {
 	return output
 }
 
+func SplitLines(content []string) [][]string {
+	output := [][]string{}
+	for i := 0; i < len(content); i++ {
+		output = append(output, strings.Split(content[i], ""))
+	}
+	return output
+}
+
 func GetInputIntList(name string) []int {
 	content := GetInputLines(name)
 	output := make([]int, len(content))

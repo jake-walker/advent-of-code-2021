@@ -50,3 +50,11 @@ func GetInputIntList(name string) []int {
 	}
 	return output
 }
+
+func StringSliceToIntSlice(in []string) []int {
+	out := make([]int, len(in))
+	for i, s := range in {
+		out[i], _ = strconv.Atoi(s)
+	}
+	return out
+}

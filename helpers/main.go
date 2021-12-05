@@ -15,9 +15,13 @@ func GetInput(name string) string {
 	return string(content)
 }
 
+func GetLines(content string) []string {
+	return strings.Split(strings.ReplaceAll(content, "\r\n", "\n"), "\n")
+}
+
 func GetInputLines(name string) []string {
 	content := GetInput(name)
-	lines := strings.Split(strings.ReplaceAll(content, "\r\n", "\n"), "\n")
+	lines := GetLines(content)
 	output := []string{}
 	for _, line := range lines {
 		if strings.TrimSpace(line) != "" {

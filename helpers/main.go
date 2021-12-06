@@ -12,7 +12,7 @@ func GetInput(name string) string {
 	if err != nil {
 		log.Fatalf("failed to read input file: %v", content)
 	}
-	return string(content)
+	return strings.TrimSpace(string(content))
 }
 
 func GetLines(content string) []string {
@@ -58,7 +58,11 @@ func GetInputIntList(name string) []int {
 func StringSliceToIntSlice(in []string) []int {
 	out := make([]int, len(in))
 	for i, s := range in {
-		out[i], _ = strconv.Atoi(s)
+		j, err := strconv.Atoi(s)
+		if err != nil {
+			log.Fatalf("failed to convert slice element %v to int: %v", out[i], err)
+		}
+		out[i] = j
 	}
 	return out
 }

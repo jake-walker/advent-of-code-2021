@@ -3,6 +3,7 @@ package helpers
 import (
 	"log"
 	"os"
+	"reflect"
 	"strconv"
 	"strings"
 )
@@ -65,4 +66,15 @@ func StringSliceToIntSlice(in []string) []int {
 		out[i] = j
 	}
 	return out
+}
+
+func Contains(search interface{}, slice interface{}) bool {
+	sliceVal := reflect.ValueOf(slice)
+	for i := 0; i < sliceVal.Len(); i++ {
+		if sliceVal.Index(i) == search {
+			return true
+		}
+	}
+
+	return false
 }

@@ -8,6 +8,11 @@ import (
 	"strings"
 )
 
+type Point struct {
+	X int
+	Y int
+}
+
 func GetInput(name string) string {
 	content, err := os.ReadFile(name)
 	if err != nil {
@@ -36,6 +41,14 @@ func SplitLines(content []string) [][]string {
 	output := [][]string{}
 	for i := 0; i < len(content); i++ {
 		output = append(output, strings.Split(content[i], ""))
+	}
+	return output
+}
+
+func SplitLinesInt(content []string) [][]int {
+	output := [][]int{}
+	for i := 0; i < len(content); i++ {
+		output = append(output, StringSliceToIntSlice(strings.Split(content[i], "")))
 	}
 	return output
 }

@@ -91,3 +91,16 @@ func Contains(search interface{}, slice interface{}) bool {
 
 	return false
 }
+
+func MinMax(slice []int) (min, max int) {
+	min, max = slice[0], slice[0]
+	for _, i := range slice {
+		if max < i {
+			max = i
+		}
+		if min > i {
+			min = i
+		}
+	}
+	return
+}

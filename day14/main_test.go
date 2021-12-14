@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/jake-walker/advent-of-code-2021/helpers"
-	"strings"
 	"testing"
 )
 
@@ -26,7 +25,11 @@ func TestLoadInput(t *testing.T) {
 		"CC -> N\n" +
 		"CN -> C")
 	actualTemplate, actualPairs := LoadInput(input)
-	expectedTemplate := []string{"N", "N", "C", "B"}
+	expectedTemplate := map[string]int{
+		"NN": 1,
+		"NC": 1,
+		"CB": 1,
+	}
 	expectedPairs := map[string]string{
 		"CH": "B",
 		"HH": "N",
@@ -47,7 +50,7 @@ func TestLoadInput(t *testing.T) {
 	}
 
 	if diff := cmp.Diff(actualTemplate, expectedTemplate); diff != "" {
-		t.Errorf("LoadInput() template = %v, want %v", actualTemplate, expectedTemplate)
+		t.Errorf("LoadInput() template =\n%v", diff)
 	}
 
 	if diff := cmp.Diff(actualPairs, expectedPairs); diff != "" {
@@ -74,16 +77,27 @@ func TestInsertPairs(t *testing.T) {
 		"CC": "N",
 		"CN": "C",
 	}
-	template := strings.Split("NBCCNBBBCBHCB", "")
+	template := map[string]int{
+		"NN": 1,
+		"NC": 1,
+		"CB": 1,
+	}
 	actual := InsertPairs(template, pairs)
-	expected := strings.Split("NBBBCNCCNBBNBNBBCHBHHBCHB", "")
+	expected := map[string]int{
+		"NC": 1,
+		"CN": 1,
+		"NB": 1,
+		"BC": 1,
+		"CH": 1,
+		"HB": 1,
+	}
 
 	if diff := cmp.Diff(actual, expected); diff != "" {
 		t.Errorf("InsertPairs() =\n%v", diff)
 	}
 }
 
-func TestInsertLoop(t *testing.T) {
+func TestInsertLoop10(t *testing.T) {
 	pairs := map[string]string{
 		"CH": "B",
 		"HH": "N",
@@ -102,9 +116,45 @@ func TestInsertLoop(t *testing.T) {
 		"CC": "N",
 		"CN": "C",
 	}
-	template := []string{"N", "N", "C", "B"}
+	template := map[string]int{
+		"NN": 1,
+		"NC": 1,
+		"CB": 1,
+	}
 	actual := InsertLoop(template, pairs, 10)
 	expected := 1588
+
+	if actual != expected {
+		t.Errorf("InsertLoop() = %v, want %v", actual, expected)
+	}
+}
+
+func TestInsertLoop40(t *testing.T) {
+	pairs := map[string]string{
+		"CH": "B",
+		"HH": "N",
+		"CB": "H",
+		"NH": "C",
+		"HB": "C",
+		"HC": "B",
+		"HN": "C",
+		"NN": "C",
+		"BH": "H",
+		"NC": "B",
+		"NB": "B",
+		"BN": "B",
+		"BB": "N",
+		"BC": "B",
+		"CC": "N",
+		"CN": "C",
+	}
+	template := map[string]int{
+		"NN": 1,
+		"NC": 1,
+		"CB": 1,
+	}
+	actual := InsertLoop(template, pairs, 40)
+	expected := 2188189693529
 
 	if actual != expected {
 		t.Errorf("InsertLoop() = %v, want %v", actual, expected)

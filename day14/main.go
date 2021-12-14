@@ -7,8 +7,15 @@ import (
 	"strings"
 )
 
-func LoadInput(input []string) ([]string, map[string]string) {
+func LoadInput(input []string) (map[string]int, map[string]string) {
+	pairs := make(map[string]int)
 	pairInsertions := make(map[string]string)
+
+	first := strings.Split(input[0], "")
+	for i := 0; i < len(first)-1; i++ {
+		pair := first[i : i+2]
+		pairs[strings.Join(pair, "")] += 1
+	}
 
 	for i := 1; i < len(input); i++ {
 		if input[i] == "" {
@@ -19,38 +26,51 @@ func LoadInput(input []string) ([]string, map[string]string) {
 		pairInsertions[fields[0]] = fields[2]
 	}
 
-	return strings.Split(input[0], ""), pairInsertions
+	return pairs, pairInsertions
 }
 
-func InsertPairs(template []string, pairs map[string]string) []string {
-	for i := 0; i < len(template)-1; i = i + 2 {
-		pair := template[i : i+2]
+func InsertPairs(template map[string]int, pairs map[string]string) map[string]int {
+	newTemplate := make(map[string]int)
 
-		toInsert, found := pairs[strings.Join(pair, "")]
+	for pair, count := range template {
+		split := strings.Split(pair, "")
+
+		toInsert, found := pairs[pair]
 		if !found {
 			log.Fatalf("could not find insertion for pair %v", pair)
 		}
 
-		template = append(template[:i+2], template[i+1:]...)
-		template[i+1] = toInsert
+		newPair1 := split[0] + toInsert
+		newPair2 := toInsert + split[1]
+
+		newTemplate[newPair1] += count
+		newTemplate[newPair2] += count
 	}
 
-	return template
+	return newTemplate
 }
 
-func InsertLoop(template []string, pairs map[string]string, n int) int {
+func InsertLoop(template map[string]int, pairs map[string]string, n int) int {
 	for i := 0; i < n; i++ {
-		log.Printf("running loop %v...", i)
 		template = InsertPairs(template, pairs)
 	}
 
 	counts := make(map[string]int)
-	for _, item := range template {
-		counts[item] += 1
+	for pair, count := range template {
+		split := strings.Split(pair, "")
+		counts[split[0]] += count
+		counts[split[1]] += count
 	}
+
 	values := make([]int, 0, len(counts))
 	for _, value := range counts {
-		values = append(values, value)
+		half := value / 2
+		// add one onto the half if it was an odd number
+		if value%2 != 0 {
+			half += 1
+		}
+
+		values = append(values, half)
 	}
 	min, max := helpers.MinMax(values)
 
@@ -66,4 +86,5 @@ func main() {
 
 	part2 := InsertLoop(template, pairs, 40)
 	fmt.Printf("part 2: %v\n", part2)
+	// taking away 1 from this gives the right answer, something is wrong in the code!
 }

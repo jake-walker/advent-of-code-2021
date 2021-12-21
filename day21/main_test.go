@@ -9,63 +9,29 @@ var input = "Player 1 starting position: 4\nPlayer 2 starting position: 8"
 
 func TestNewGame(t *testing.T) {
 	actual := NewGame(input)
-	expected := Game{
-		Players: []Player{
-			{
-				Position: 4,
-				Score:    0,
-			},
-			{
-				Position: 8,
-				Score:    0,
-			},
-		},
-		BoardLength:  10,
-		WinningScore: 1000,
-		DieValue:     1,
-		DieRolls:     0,
-	}
+	expected := []int{4, 8}
 
 	if diff := cmp.Diff(actual, expected); diff != "" {
 		t.Errorf("NewGame() = \n%v", diff)
 	}
 }
 
-func TestPlayUntilWinner(t *testing.T) {
-	actual := PlayUntilWinner(Game{
-		Players: []Player{
-			{
-				Position: 4,
-				Score:    0,
-			},
-			{
-				Position: 8,
-				Score:    0,
-			},
-		},
-		BoardLength:  10,
-		WinningScore: 1000,
-		DieValue:     1,
-		DieRolls:     0,
-	})
-	expected := Game{
-		Players: []Player{
-			{
-				Position: 10,
-				Score:    1000,
-			},
-			{
-				Position: 3,
-				Score:    745,
-			},
-		},
-		BoardLength:  10,
-		WinningScore: 1000,
-		DieValue:     94,
-		DieRolls:     993,
-	}
+func TestPlayDeterministicDie(t *testing.T) {
+	actual := PlayDeterministicDie([]int{4, 8})
+	expected := 739785
 
-	if diff := cmp.Diff(actual, expected); diff != "" {
-		t.Errorf("PlayUntilWinner() =\n%v", diff)
+	if actual != expected {
+		t.Errorf("PlayDeterministicDie() = %v, want %v", actual, expected)
+	}
+}
+
+func TestPlayQuantumDie(t *testing.T) {
+	actualWins := []int{0, 0}
+	expectedWins := []int{444356092776315, 341960390180808}
+
+	PlayQuantumDie([]int{4, 8}, []int{0, 0}, actualWins, 0)
+
+	if diff := cmp.Diff(actualWins, expectedWins); diff != "" {
+		t.Errorf("PlayQuantumDie() =\n%v", diff)
 	}
 }

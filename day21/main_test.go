@@ -29,7 +29,7 @@ func TestPlayQuantumDie(t *testing.T) {
 	actualWins := []int{0, 0}
 	expectedWins := []int{444356092776315, 341960390180808}
 
-	PlayQuantumDie([]int{4, 8}, []int{0, 0}, actualWins, 0)
+	PlayQuantumDie([]int{4, 8}, []int{0, 0}, actualWins, 0, 1)
 
 	if diff := cmp.Diff(actualWins, expectedWins); diff != "" {
 		t.Errorf("PlayQuantumDie() =\n%v", diff)
